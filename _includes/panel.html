@@ -1,0 +1,38 @@
+<aside class="panel">
+  {%- if page.layout == 'post' -%}
+  <section class="panel-block toc">
+    <h2 class="panel-title">Contents</h2>
+    <nav class="toc-list"></nav>
+  </section>
+  {%- else -%}
+  {%- if site.posts.size > 0 -%}
+  <section class="panel-block">
+    <h2 class="panel-title">Recently Updated</h2>
+    <ul class="recent">
+      {%- for post in site.posts limit: 5 -%}
+      <li><a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a></li>
+      {%- endfor -%}
+    </ul>
+  </section>
+  {%- endif -%}
+
+  {%- if site.tags.size > 0 -%}
+  {%- comment -%} 글이 많은 태그 순으로 10개 {%- endcomment -%}
+  {%- assign ranked = "" -%}
+  {%- for tag in site.tags -%}
+    {%- assign n = tag[1].size | plus: 10000 -%}
+    {%- capture ranked -%}{{ ranked }}{{ n }}::{{ tag[0] }}||{%- endcapture -%}
+  {%- endfor -%}
+  {%- assign ranked = ranked | split: '||' | sort | reverse -%}
+  <section class="panel-block">
+    <h2 class="panel-title">Trending Tags</h2>
+    <div class="tag-cloud">
+      {%- for item in ranked limit: 10 -%}
+      {%- assign name = item | split: '::' | last -%}
+      <a class="tag" href="{{ '/blog/tags/' | relative_url }}#{{ name | slugify: 'raw' }}">{{ name }}</a>
+      {%- endfor -%}
+    </div>
+  </section>
+  {%- endif -%}
+  {%- endif -%}
+</aside>

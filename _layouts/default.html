@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: 'ko' }}">
+{%- include head.html -%}
+<body>
+  {%- include sidebar.html -%}
+  <div class="sidebar-mask"></div>
+  <div class="main-col">
+    {%- include topbar.html -%}
+    <div class="content-row">
+      <main class="content">
+        <div id="page-body">
+          {{ content }}
+        </div>
+        <div id="search-results" hidden>
+          <p class="search-count"></p>
+          <div class="search-list"></div>
+        </div>
+      </main>
+      {%- include panel.html -%}
+    </div>
+    <footer class="site-footer">
+      <span>© {{ site.time | date: '%Y' }} {{ site.author | escape }}</span>
+      <span>Powered by Jekyll · GitHub Pages</span>
+    </footer>
+  </div>
+  <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
+</body>
+</html>

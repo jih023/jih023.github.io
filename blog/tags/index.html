@@ -1,0 +1,27 @@
+---
+layout: default
+title: Tags
+---
+<h1 class="page-title">Tags</h1>
+{%- assign tags = site.tags | sort -%}
+{%- if tags.size == 0 -%}
+<p class="empty">아직 태그가 없어요.</p>
+{%- else -%}
+<div class="tag-cloud tag-cloud-lg">
+  {%- for tag in tags -%}
+  <a class="tag" href="#{{ tag[0] | slugify: 'raw' }}">{{ tag[0] }}<span class="count">{{ tag[1].size }}</span></a>
+  {%- endfor -%}
+</div>
+<div class="group-list">
+  {%- for tag in tags -%}
+  <section class="group group-static" id="{{ tag[0] | slugify: 'raw' }}">
+    <h2 class="group-head"><span class="group-name">#{{ tag[0] }}</span><span class="group-count">{{ tag[1].size }}개의 글</span></h2>
+    <ul class="group-posts">
+      {%- for post in tag[1] -%}
+      <li><a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a><time>{{ post.date | date: '%Y. %m. %d' }}</time></li>
+      {%- endfor -%}
+    </ul>
+  </section>
+  {%- endfor -%}
+</div>
+{%- endif -%}

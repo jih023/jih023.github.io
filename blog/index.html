@@ -1,0 +1,32 @@
+---
+layout: default
+---
+{%- if site.posts.size == 0 -%}
+<p class="empty">아직 글이 없어요.</p>
+{%- endif -%}
+<div class="post-list">
+  {%- for post in site.posts -%}
+  {%- assign summary = post.description | default: post.excerpt | strip_html | normalize_whitespace | truncate: 160 -%}
+  <article class="post-card">
+    <a class="post-card-link" href="{{ post.url | relative_url }}" aria-label="{{ post.title | escape }}"></a>
+    <h2 class="post-card-title">{{ post.title | escape }}</h2>
+    {%- if summary != "" -%}<p class="post-card-summary">{{ summary }}</p>{%- endif -%}
+    <div class="meta">
+      <span class="meta-item">
+        <svg viewBox="0 0 24 24"><path d="M7 2v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2zM5 9h14v11H5z" fill-rule="evenodd"/></svg>
+        <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%Y. %m. %d' }}</time>
+      </span>
+      {%- if post.categories.size > 0 -%}
+      <span class="meta-item">
+        <svg viewBox="0 0 24 24"><path d="M3 6a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm2 2v10h14V8z" fill-rule="evenodd"/></svg>
+        {{ post.categories | join: ', ' }}
+      </span>
+      {%- endif -%}
+    </div>
+  </article>
+  {%- endfor -%}
+</div>
+
+<p class="write-link">
+  <a id="new-post" href="https://github.com/{{ site.github_repo }}/new/{{ site.github_branch }}/_posts">+ 새 글 쓰기</a>
+</p>

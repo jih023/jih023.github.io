@@ -1,0 +1,39 @@
+---
+layout: default
+title: Categories
+---
+<h1 class="page-title">Categories</h1>
+{%- assign with_cat = site.posts | where_exp: "p", "p.categories.size > 0" -%}
+{%- assign parents = with_cat | group_by_exp: "p", "p.categories.first" | sort: "name" -%}
+{%- if parents.size == 0 -%}
+<p class="empty">아직 카테고리가 없어요. 글 머리말에 <code>categories: [Backend]</code> 처럼 넣어보세요.</p>
+{%- endif -%}
+<div class="group-list">
+  {%- for parent in parents -%}
+  <details class="group" id="{{ parent.name | slugify: 'raw' }}" open>
+    <summary>
+      <svg viewBox="0 0 24 24"><path d="M3 6a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm2 2v10h14V8z" fill-rule="evenodd"/></svg>
+      <span class="group-name">{{ parent.name }}</span>
+      <span class="group-count">{{ parent.size }}개의 글</span>
+    </summary>
+    {%- assign subs = parent.items | where_exp: "p", "p.categories.size > 1" | group_by_exp: "p", "p.categories[1]" | sort: "name" -%}
+    {%- for sub in subs -%}
+    <h3 class="sub-head" id="{{ sub.name | slugify: 'raw' }}">{{ sub.name }} <span>{{ sub.size }}</span></h3>
+    <ul class="group-posts">
+      {%- for post in sub.items -%}
+      <li><a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a><time>{{ post.date | date: '%Y. %m. %d' }}</time></li>
+      {%- endfor -%}
+    </ul>
+    {%- endfor -%}
+    {%- assign direct = parent.items | where_exp: "p", "p.categories.size == 1" -%}
+    {%- if direct.size > 0 -%}
+    {%- if subs.size > 0 -%}<h3 class="sub-head">기타 <span>{{ direct.size }}</span></h3>{%- endif -%}
+    <ul class="group-posts">
+      {%- for post in direct -%}
+      <li><a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a><time>{{ post.date | date: '%Y. %m. %d' }}</time></li>
+      {%- endfor -%}
+    </ul>
+    {%- endif -%}
+  </details>
+  {%- endfor -%}
+</div>
